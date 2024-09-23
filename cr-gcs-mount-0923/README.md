@@ -8,6 +8,11 @@ terraform plan
 terraform apply
 ```
 
+テスト終了のためにサービス削除する
+```
+terraform destroy
+```
+
 コンテナイメージのアップロード
 
 ```sh
