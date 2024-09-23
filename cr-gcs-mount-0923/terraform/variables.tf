@@ -25,3 +25,8 @@ variable "image_path" {
   description = "docker image path"
   type        = string
 }
+
+variable "user_email" {
+  description = "user email"
+  type        = string
+}

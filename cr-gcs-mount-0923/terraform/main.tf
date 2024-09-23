@@ -5,8 +5,8 @@ provider "google" {
 
 # GCSバケットの作成
 resource "google_storage_bucket" "default" {
-  name     = var.storage_name
-  location = var.region
+  name          = var.storage_name
+  location      = var.region
   force_destroy = true
 }
 
@@ -19,17 +19,15 @@ resource "google_service_account" "cloud_run_sa" {
 # サービスアカウントにGCSアクセス権限を付与
 resource "google_project_iam_member" "storage" {
   project = var.project
-  role    = "roles/storage.objectViewer"
+  role    = "roles/storage.objectUser"
   member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
 }
-resource "random_id" "bucket_suffix" {
-  byte_length = 4
-}
+
 # Cloud Run サービスの作成
 resource "google_cloud_run_v2_service" "service" {
-  depends_on = [google_storage_bucket.default]
-  name       = "gcs-fuse-sample-${random_id.bucket_suffix.hex}"
-  location   = var.region
+  depends_on          = [google_storage_bucket.default]
+  name                = "gcs-fuse-sample-0923"
+  location            = var.region
   deletion_protection = false
 
   template {
@@ -66,4 +64,12 @@ resource "google_cloud_run_v2_service" "service" {
   }
 
   ingress = "INGRESS_TRAFFIC_ALL"
+}
+
+resource "google_cloud_run_v2_service_iam_member" "member" {
+  project  = google_cloud_run_v2_service.service.project
+  location = google_cloud_run_v2_service.service.location
+  name     = google_cloud_run_v2_service.service.name
+  role     = "roles/run.invoker"
+  member   = "user:${var.user_email}"
 }
