@@ -9,7 +9,7 @@ def process_something(id: int, message: str):
     for k in range(n):
         print(f"id{n}: {message} {k}th")
         time.sleep(1)
-    return message
+    return f"message {id}"
 
 
 def do_job(message: str, number: int):
@@ -23,3 +23,4 @@ if __name__ == "__main__":
     message = os.getenv("MESSAGE")
     number = int(os.getenv("NUMBER"))
     messages = do_job(message, number)
+    print(messages)
