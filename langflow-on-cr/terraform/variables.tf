@@ -15,19 +15,8 @@ variable "storage_name" {
   default     = "fuse-test-bucket"
 }
 
-variable "mount_path" {
-  description = "instance mount path"
-  type        = string
-  default     = "/mnt/gcs-bucket"
-}
-
 variable "image_path" {
   description = "docker image path"
-  type        = string
-}
-
-variable "user_email" {
-  description = "user email"
   type        = string
 }
 

@@ -5,14 +5,15 @@ provider "google" {
 
 # GCSバケットの作成
 resource "google_storage_bucket" "default" {
-  name          = var.storage_name
-  location      = var.region
-  force_destroy = true
+  name                        = var.storage_name
+  location                    = var.region
+  force_destroy               = true
+  uniform_bucket_level_access = true
 }
 
 # Cloud Run サービス用のサービスアカウント
 resource "google_service_account" "cloud_run_sa" {
-  account_id   = "cloud-run-sa"
+  account_id   = "cloud-run-sa-261024"
   display_name = "Cloud Run Service Account"
 }
 
@@ -26,28 +27,28 @@ resource "google_project_iam_member" "storage" {
 # Cloud Run サービスの作成
 resource "google_cloud_run_v2_service" "service" {
   depends_on          = [google_storage_bucket.default]
-  name                = "gcs-fuse-sample-0923"
+  name                = "langflow-test"
   location            = var.region
   deletion_protection = false
 
   template {
     service_account = google_service_account.cloud_run_sa.email
     timeout         = "3.5s"
-
-
     containers {
       image = var.image_path
-      env {
-        name  = "MOUNTPATH"
-        value = var.mount_path
-      }
       volume_mounts {
         name       = var.volume_name
-        mount_path = var.mount_path
+        mount_path = "/app/langflow-storage"
       }
       ports {
-        container_port = 8080
+        container_port = 7860
       }
+      resources {
+        limits = {
+          "memory" = "2Gi"
+        }
+      }
+
     }
 
     volumes {
@@ -71,5 +72,5 @@ resource "google_cloud_run_v2_service_iam_member" "member" {
   location = google_cloud_run_v2_service.service.location
   name     = google_cloud_run_v2_service.service.name
   role     = "roles/run.invoker"
-  member   = "user:${var.user_email}"
+  member   = "allUsers"
 }
