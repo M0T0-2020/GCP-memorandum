@@ -12,7 +12,7 @@ variable "region" {
 variable "storage_name" {
   description = "storage name to be mounted"
   type        = string
-  default     = "fuse-test-bucket"
+  default     = "fuse-test-bucket-20241031"
 }
 
 variable "image_path" {

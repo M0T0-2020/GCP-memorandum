@@ -5,10 +5,9 @@ provider "google" {
 
 # GCSバケットの作成
 resource "google_storage_bucket" "default" {
-  name                        = var.storage_name
-  location                    = var.region
-  force_destroy               = true
-  uniform_bucket_level_access = true
+  name          = var.storage_name
+  location      = var.region
+  force_destroy = true # 実験なので、消せるようにする
 }
 
 # Cloud Run サービス用のサービスアカウント
@@ -26,14 +25,15 @@ resource "google_project_iam_member" "storage" {
 
 # Cloud Run サービスの作成
 resource "google_cloud_run_v2_service" "service" {
-  depends_on          = [google_storage_bucket.default]
-  name                = "langflow-test"
-  location            = var.region
+  depends_on = [google_storage_bucket.default]
+  name       = "langflow-test"
+  location   = var.region
+  # 実験なので、消せるようにする
   deletion_protection = false
 
   template {
     service_account = google_service_account.cloud_run_sa.email
-    timeout         = "3.5s"
+    timeout         = "120s"
     containers {
       image = var.image_path
       volume_mounts {
@@ -45,10 +45,10 @@ resource "google_cloud_run_v2_service" "service" {
       }
       resources {
         limits = {
-          "memory" = "2Gi"
+          "memory" = "4Gi"
+          "cpu"    = "6"
         }
       }
-
     }
 
     volumes {
