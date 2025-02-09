@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "bucket" {
-  project = var.project_id
+  project       = var.project_id
   name          = var.gcs_bucket_name
   location      = var.region
   force_destroy = true
@@ -8,14 +8,14 @@ resource "google_storage_bucket" "bucket" {
 }
 
 resource "google_bigquery_dataset" "dataset" {
-  project = var.project_id
+  project    = var.project_id
   dataset_id = var.dataset_id
-  location = var.region
+  location   = var.region
 }
 
 module "table1" {
-  depends_on = [ google_storage_bucket.bucket, google_bigquery_dataset.dataset ]
-  source = "./export-table"
+  depends_on = [google_storage_bucket.bucket, google_bigquery_dataset.dataset]
+  source     = "./export-table"
 
   project_id      = var.project_id
   region          = var.region

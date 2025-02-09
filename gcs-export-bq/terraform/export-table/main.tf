@@ -1,5 +1,5 @@
 resource "google_bigquery_table" "table" {
-  project = var.project_id
+  project    = var.project_id
   dataset_id = var.dataset_id
   # テーブルIDを指定
   table_id = var.table_id
@@ -23,7 +23,7 @@ resource "google_bigquery_table" "table" {
       allow_jagged_rows = true
     }
     # スキーマファイルのパスを指定
-    schema        = file("../bq_schema/${var.table_name}.json") 
+    schema        = file("../bq_schema/${var.table_name}.json")
     source_format = "CSV"
     source_uris   = ["gs://${var.gcs_bucket_name}/*"]
   }
@@ -31,7 +31,7 @@ resource "google_bigquery_table" "table" {
 
 
 resource "google_bigquery_table" "view" {
-  project = var.project_id
+  project    = var.project_id
   dataset_id = var.dataset_id
   table_id   = "${var.table_id}_view"
   # テストなので、テーブルを誤削除の保護はしない。
