@@ -1,0 +1,27 @@
+[
+    {
+        "name": "name",
+        "type": "STRING",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "age",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "meta",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "meta2",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "meta3",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    }
+]
