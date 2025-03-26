@@ -15,7 +15,7 @@ resource "google_bigquery_dataset" "dataset" {
 
 module "table1" {
   depends_on = [google_storage_bucket.bucket, google_bigquery_dataset.dataset]
-  source     = "./export-table"
+  source     = "./external-table"
 
   project_id      = var.project_id
   region          = var.region

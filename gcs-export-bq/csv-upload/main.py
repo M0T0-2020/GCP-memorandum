@@ -45,11 +45,12 @@ def upload_csv_to_gcs(bucket_name: str, local_file_path: Path, gcs_file_path: st
         print(f"ファイルのアップロードに失敗しました: {e}")
 
 
-def main(df: pd.DataFrame, file_name: str):
+def main(_id:int, df: pd.DataFrame, file_name: str):
     df.to_csv(SAVE_DIR / file_name, index=False)
     local_file_path = SAVE_DIR / file_name
-    gcs_file_path = f"id=1/{file_name}"
+    gcs_file_path = f"id={_id}/{file_name}"
     upload_csv_to_gcs(BUCKET_NAME, local_file_path, gcs_file_path)
+    return local_file_path
 
 
 if __name__ == "__main__":
@@ -60,7 +61,7 @@ if __name__ == "__main__":
             "meta": ["A", "B", "C"],
         }
     )
-    main(df, "test1.csv")
+    main(1, df, "test1.csv")
 
     df = pd.DataFrame(
         {
@@ -70,7 +71,7 @@ if __name__ == "__main__":
             "meta2": ["D", "E", "F"],
         }
     )
-    main(df, "test2.csv")
+    main(2, df, "test2.csv")
 
     df = pd.DataFrame(
         {
@@ -81,4 +82,4 @@ if __name__ == "__main__":
             "meta3": ["G", "H", "I"],
         }
     )
-    main(df, "test3.csv")
+    main(3, df, "test3.csv")
